@@ -22,6 +22,7 @@ module.exports = {
       };
       await channel.publish(exchange, routingKey, Buffer.from(JSON.stringify(msg)));
       console.log('Message published');
+      return 'email is being processed';
     } catch (e) {
       console.error('Error in publishing message', e);
     } finally {

@@ -19,9 +19,24 @@ services:
     image: broker:latest
     build:
       context: .
+      target: backend
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
+    networks:
+      - rabbitmq_nodejs
+  consumer:
+    container_name: consumer
+    image: consumer:latest
+    build:
+      context: .
+      target: consumer
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    depends_on:
+      - rabbitmq
+    command: sh -c '/bin/wait-for-it.sh rabbitmq:5672 --timeout=300 -- node ./service/consumer.js'
     networks:
       - rabbitmq_nodejs
 networks:
